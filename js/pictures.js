@@ -24,7 +24,6 @@ var MIN_COMMENT_AVATAR_COUNT = 1;
 var MAX_COMMENT_AVATAR_COUNT = 6;
 var NUMBER_OF_PHOTOS = 25;
 
-var photoCounter = 0;
 var pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
@@ -46,15 +45,14 @@ var getRandomComment = function () {
 var createItemsArrayWithGenerator = function (length, itemGenerator) {
   var itemsArray = [];
   for (var i = 0; i < length; i++) {
-    itemsArray[i] = itemGenerator();
+    itemsArray[i] = itemGenerator(i);
   }
   return itemsArray;
 };
 
-var getRandomPhoto = function () {
-  photoCounter++;
+var getRandomPhoto = function (photoCounter) {
   return {
-    url: 'photos/' + photoCounter + '.jpg',
+    url: 'photos/' + (photoCounter + 1) + '.jpg',
     likes: getRandomIntFromInterval(MIN_LIKES, MAX_LIKES),
     comments: createItemsArrayWithGenerator(getRandomIntFromInterval(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT), getRandomComment),
     description: getRandomFromArray(MOCK_DESCRIPTIONS)
