@@ -23,6 +23,7 @@ var MAX_COMMENT_COUNT = 20;
 var MIN_COMMENT_AVATAR_COUNT = 1;
 var MAX_COMMENT_AVATAR_COUNT = 6;
 var NUMBER_OF_PHOTOS = 25;
+var ESC_BUTTON_NUMBER = 27;
 
 var pictureTemplate = document.querySelector('#picture')
     .content
@@ -67,6 +68,7 @@ var getPictureElement = function (picture) {
   pictureElement.addEventListener('click', function () {
     updateBigPictureData(picture);
     document.querySelector('.big-picture').classList.remove('hidden');
+    document.addEventListener('keydown', onBigPictureOverlayEscButtonPress);
   });
   return pictureElement;
 };
@@ -101,6 +103,24 @@ var updateBigPictureData = function (data) {
   document.querySelector('.social__caption').textContent = data.description;
 };
 
+var closeOverlayElement = function (className) {
+  document.querySelector(className).classList.add('hidden');
+};
+
+var onBigPictureOverlayEscButtonPress = function (evt) {
+  if (evt.keyCode === ESC_BUTTON_NUMBER) {
+    closeOverlayElement('.big-picture');
+    document.removeEventListener('keydown', onBigPictureOverlayEscButtonPress);
+  }
+};
+
+var onImgUploadOverlayEscButtonPress = function (evt) {
+  if (evt.keyCode === ESC_BUTTON_NUMBER) {
+    closeOverlayElement('.img-upload__overlay');
+    document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
+  }
+};
+
 // Создаю MOCK данные
 var photos = createItemsArrayWithGenerator(NUMBER_OF_PHOTOS, getRandomPhoto);
 
@@ -120,13 +140,16 @@ document.querySelector('.social__comment-count').classList.add('visually-hidden'
 document.querySelector('.comments-loader').classList.add('visually-hidden');
 
 document.querySelector('.big-picture__cancel').addEventListener('click', function () {
-  document.querySelector('.big-picture').classList.add('hidden');
+  closeOverlayElement('.big-picture');
+  document.removeEventListener('keydown', onBigPictureOverlayEscButtonPress);
 });
 
 document.querySelector('.img-upload__cancel').addEventListener('click', function () {
-  document.querySelector('.img-upload__overlay').classList.add('hidden');
+  closeOverlayElement('.img-upload__overlay');
+  document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
 });
 
 document.querySelector('#upload-file').addEventListener('change', function () {
   document.querySelector('.img-upload__overlay').classList.remove('hidden');
+  document.addEventListener('keydown', onImgUploadOverlayEscButtonPress);
 });
