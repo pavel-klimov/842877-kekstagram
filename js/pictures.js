@@ -235,8 +235,8 @@ var photos = createItemsArrayWithGenerator(NUMBER_OF_PHOTOS, getRandomPhoto);
 
 // Создаю и вставляю на страницу предью изображений
 var photoElementsList = document.createDocumentFragment();
-for (var i = 0; i < NUMBER_OF_PHOTOS; i++) {
-  photoElementsList.appendChild(getPictureElement(photos[i]));
+for (var index = 0; index < NUMBER_OF_PHOTOS; index++) {
+  photoElementsList.appendChild(getPictureElement(photos[index]));
 }
 document.querySelector('.pictures').appendChild(photoElementsList);
 
@@ -262,3 +262,37 @@ document.querySelector('#upload-file').addEventListener('change', function () {
 });
 
 document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
+
+// Хэш-теги:
+var onHashTagValidate = function (evt) {
+  var target = evt.target;
+  var hashTags = target.value.split(' ');
+  target.setCustomValidity('');
+  if (hashTags.length > 5) {
+    target.setCustomValidity('Нельзя указывать больше пяти хэш-тегов;');
+  } else {
+    for (var i = 0; i < hashTags.length; i++) {
+      if (hashTags[i][0] !== '#') {
+        target.setCustomValidity('Хэш-тег должен начинаться с символа # (решётка);');
+        break;
+      } else if (hashTags[i].length < 2) {
+        target.setCustomValidity('Хэш-тег не может состоять только из одной решётки;');
+        break;
+      } else if (hashTags[i].length > 20) {
+        target.setCustomValidity('Максимальная длина хэш-тега 20 символов, включая решётку;');
+        break;
+      } else {
+        for (var j = i + 1; j < hashTags.length; j++) {
+          if (hashTags[i] === hashTags[j]) {
+            target.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды;');
+            break;
+          } else if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
+            target.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды, теги нечувствительны к регистру;');
+            break;
+          }
+        }
+      }
+    }
+  }
+};
+document.querySelector('.text__hashtags').addEventListener('input', onHashTagValidate);
