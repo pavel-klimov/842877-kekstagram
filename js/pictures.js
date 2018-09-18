@@ -210,6 +210,7 @@ var setScaleEffectLevel = function (level) {
   document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
 };
 
+// Делегирование:
 var onScaleEffectLevel = function (evt) {
   var level = parseInt(document.querySelector('.scale__control--value').value, 10);
   var target = evt.target;
