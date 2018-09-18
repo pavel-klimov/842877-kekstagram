@@ -209,23 +209,25 @@ var setScaleEffectLevel = function (level) {
   document.querySelector('.scale__control--value').value = level + '%';
   document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
 };
-var onScaleEffectLevelUp = function () {
-  var level = parseInt(document.querySelector('.scale__control--value').value, 10) + SCALE_EFFECT_STEP;
-  if (level >= SCALE_EFFECT_MAX) {
-    level = SCALE_EFFECT_MAX;
-  }
-  setScaleEffectLevel(level);
-};
-var onScaleEffectLevelDown = function () {
-  var level = parseInt(document.querySelector('.scale__control--value').value, 10) - SCALE_EFFECT_STEP;
-  if (level <= SCALE_EFFECT_MIN) {
-    level = SCALE_EFFECT_MIN;
+
+var onScaleEffectLevel = function (evt) {
+  var level = parseInt(document.querySelector('.scale__control--value').value, 10);
+  var target = evt.target;
+  if (target.classList.contains('scale__control--smaller')) {
+    level -= SCALE_EFFECT_STEP;
+    if (level <= SCALE_EFFECT_MIN) {
+      level = SCALE_EFFECT_MIN;
+    }
+  } else if (target.classList.contains('scale__control--bigger')) {
+    level += SCALE_EFFECT_STEP;
+    if (level >= SCALE_EFFECT_MAX) {
+      level = SCALE_EFFECT_MAX;
+    }
   }
   setScaleEffectLevel(level);
 };
 
-document.querySelector('.scale__control--smaller').addEventListener('click', onScaleEffectLevelDown);
-document.querySelector('.scale__control--bigger').addEventListener('click', onScaleEffectLevelUp);
+document.querySelector('.img-upload__scale').addEventListener('click', onScaleEffectLevel);
 
 // Drag and Drop:
 document.querySelector('.effect-level__pin').addEventListener('mousedown', function () {
