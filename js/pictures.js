@@ -61,6 +61,11 @@ var EFFECTS_PREVIEW_SETTINGS = {
     className: 'effects__preview--heat'
   }
 };
+var FILTER_EFFECT_DEFAULT = 100;
+var SCALE_EFFECT_STEP = 25;
+var SCALE_EFFECT_DEFAULT = 100;
+var SCALE_EFFECT_MIN = 25;
+var SCALE_EFFECT_MAX = 100;
 
 var pictureTemplate = document.querySelector('#picture')
     .content
@@ -194,11 +199,35 @@ var setEffectLevelBigPicture = function (level, nameEffect) {
 
 var onFilterEffectChange = function () {
   var nameEffect = document.querySelector('.effects__radio:checked').value;
-  document.querySelector('.effect-level__value').value = 100;
+  document.querySelector('.effect-level__value').value = FILTER_EFFECT_DEFAULT;
   setFilterEffectClass(nameEffect);
-  setEffectLevelLine(100);
-  setEffectLevelBigPicture(100, nameEffect);
+  setEffectLevelLine(FILTER_EFFECT_DEFAULT);
+  setEffectLevelBigPicture(FILTER_EFFECT_DEFAULT, nameEffect);
 };
+
+var setScaleEffectLevel = function (level) {
+  document.querySelector('.scale__control--value').value = level + '%';
+  document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
+};
+
+var onScaleEffectLevel = function (evt) {
+  var level = parseInt(document.querySelector('.scale__control--value').value, 10);
+  var target = evt.target;
+  if (target.classList.contains('scale__control--smaller')) {
+    level -= SCALE_EFFECT_STEP;
+    if (level <= SCALE_EFFECT_MIN) {
+      level = SCALE_EFFECT_MIN;
+    }
+  } else if (target.classList.contains('scale__control--bigger')) {
+    level += SCALE_EFFECT_STEP;
+    if (level >= SCALE_EFFECT_MAX) {
+      level = SCALE_EFFECT_MAX;
+    }
+  }
+  setScaleEffectLevel(level);
+};
+
+document.querySelector('.img-upload__scale').addEventListener('click', onScaleEffectLevel);
 
 // Drag and Drop:
 document.querySelector('.effect-level__pin').addEventListener('mousedown', function () {
@@ -235,8 +264,8 @@ var photos = createItemsArrayWithGenerator(NUMBER_OF_PHOTOS, getRandomPhoto);
 
 // Создаю и вставляю на страницу предью изображений
 var photoElementsList = document.createDocumentFragment();
-for (var i = 0; i < NUMBER_OF_PHOTOS; i++) {
-  photoElementsList.appendChild(getPictureElement(photos[i]));
+for (var index = 0; index < NUMBER_OF_PHOTOS; index++) {
+  photoElementsList.appendChild(getPictureElement(photos[index]));
 }
 document.querySelector('.pictures').appendChild(photoElementsList);
 
@@ -258,7 +287,50 @@ document.querySelector('.img-upload__cancel').addEventListener('click', function
 document.querySelector('#upload-file').addEventListener('change', function () {
   document.querySelector('.img-upload__overlay').classList.remove('hidden');
   onFilterEffectChange();
+  setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
   document.addEventListener('keydown', onImgUploadOverlayEscButtonPress);
 });
 
 document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
+
+// Хэш-теги:
+var onHashTagValidate = function (evt) {
+  var target = evt.target;
+  var hashTags = target.value.split(' ');
+  target.setCustomValidity('');
+  if (hashTags.length > 5) {
+    target.setCustomValidity('Нельзя указывать больше пяти хэш-тегов;');
+  } else {
+    for (var i = 0; i < hashTags.length; i++) {
+      if (hashTags[i][0] !== '#') {
+        target.setCustomValidity('Хэш-тег должен начинаться с символа # (решётка);');
+        break;
+      } else if (hashTags[i].length < 2) {
+        target.setCustomValidity('Хэш-тег не может состоять только из одной решётки;');
+        break;
+      } else if (hashTags[i].length > 20) {
+        target.setCustomValidity('Максимальная длина хэш-тега 20 символов, включая решётку;');
+        break;
+      } else {
+        for (var j = i + 1; j < hashTags.length; j++) {
+          if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
+            target.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды, теги нечувствительны к регистру;');
+            break;
+          }
+        }
+      }
+    }
+  }
+};
+document.querySelector('.text__hashtags').addEventListener('input', onHashTagValidate);
+
+var onImgUploadOverlayTextInputFocus = function () {
+  document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
+};
+var onImgUploadOverlayTextInputBlur = function () {
+  document.addEventListener('keydown', onImgUploadOverlayEscButtonPress);
+};
+document.querySelector('.text__hashtags').addEventListener('focus', onImgUploadOverlayTextInputFocus);
+document.querySelector('.text__hashtags').addEventListener('blur', onImgUploadOverlayTextInputBlur);
+document.querySelector('.text__description').addEventListener('focus', onImgUploadOverlayTextInputFocus);
+document.querySelector('.text__description').addEventListener('blur', onImgUploadOverlayTextInputBlur);
