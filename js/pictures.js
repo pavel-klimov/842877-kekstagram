@@ -311,10 +311,7 @@ var onHashTagValidate = function (evt) {
         break;
       } else {
         for (var j = i + 1; j < hashTags.length; j++) {
-          if (hashTags[i] === hashTags[j]) {
-            target.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды;');
-            break;
-          } else if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
+          if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
             target.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды, теги нечувствительны к регистру;');
             break;
           }
