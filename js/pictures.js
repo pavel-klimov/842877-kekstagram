@@ -1,29 +1,9 @@
 'use strict';
 
 // data
-var MOCK_COMMENTS = [
-  'Всё отлично!',
-  'В целом всё неплохо. Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-];
-var MOCK_DESCRIPTIONS = [
-  'Тестим новую камеру!',
-  'Затусили с друзьями на море',
-  'Как же круто тут кормят',
-  'Отдыхаем...',
-  'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
-  'Вот это тачка!'
-];
-var MIN_LIKES = 15;
-var MAX_LIKES = 200;
-var MIN_COMMENT_COUNT = 0;
-var MAX_COMMENT_COUNT = 20;
+
 var MIN_COMMENT_AVATAR_COUNT = 1;
 var MAX_COMMENT_AVATAR_COUNT = 6;
-var NUMBER_OF_PHOTOS = 25;
 
 var EFFECTS_PREVIEW_SETTINGS = {
   'chrome': {
@@ -81,9 +61,6 @@ var removeAllChild = function (element) {
 };
 
 // comments
-var getRandomComment = function () {
-  return (window.utils.getRandomIntFromInterval(1, 2) === 1) ? window.utils.getRandomFromArray(MOCK_COMMENTS) : window.utils.getRandomFromArray(MOCK_COMMENTS) + ' ' + window.utils.getRandomFromArray(MOCK_COMMENTS);
-};
 var getCommentElement = function (comment) {
   var commentElement = commentTemplate.cloneNode(true);
   commentElement.querySelector('.social__picture').src = 'img/avatar-' + window.utils.getRandomIntFromInterval(MIN_COMMENT_AVATAR_COUNT, MAX_COMMENT_AVATAR_COUNT) + '.svg';
@@ -99,14 +76,6 @@ var createCommentsFragment = function (comments) {
 };
 
 // photos
-var getRandomPhoto = function (photoCounter) {
-  return {
-    url: 'photos/' + (photoCounter + 1) + '.jpg',
-    likes: window.utils.getRandomIntFromInterval(MIN_LIKES, MAX_LIKES),
-    comments: window.utils.createItemsArrayWithGenerator(window.utils.getRandomIntFromInterval(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT), getRandomComment),
-    description: window.utils.getRandomFromArray(MOCK_DESCRIPTIONS)
-  };
-};
 var getPictureElement = function (picture) {
   var pictureElement = pictureTemplate.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = picture.url;
@@ -227,12 +196,11 @@ document.querySelector('.effect-level__pin').addEventListener('mousedown', funct
 
 // Подготовка страницы:
 // Создаю MOCK данные
-var photos = window.utils.createItemsArrayWithGenerator(NUMBER_OF_PHOTOS, getRandomPhoto);
 
 // Создаю и вставляю на страницу предью изображений
 var photoElementsList = document.createDocumentFragment();
-for (var index = 0; index < NUMBER_OF_PHOTOS; index++) {
-  photoElementsList.appendChild(getPictureElement(photos[index]));
+for (var index = 0; index < window.data.NUMBER_OF_PHOTOS; index++) {
+  photoElementsList.appendChild(getPictureElement(window.data.photos[index]));
 }
 document.querySelector('.pictures').appendChild(photoElementsList);
 
