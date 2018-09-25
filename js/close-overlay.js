@@ -41,7 +41,7 @@
   document.querySelector('.text__hashtags').addEventListener('blur', onImgUploadOverlayTextInputBlur);
   document.querySelector('.text__description').addEventListener('focus', onImgUploadOverlayTextInputFocus);
   document.querySelector('.text__description').addEventListener('blur', onImgUploadOverlayTextInputBlur);
-  window.form = {
+  window.closeOverlay = {
     onBigPictureOverlayEscButtonPress: onBigPictureOverlayEscButtonPress,
     onImgUploadOverlayEscButtonPress: onImgUploadOverlayEscButtonPress
   };
