@@ -14,6 +14,17 @@
       element.removeChild(element.firstChild);
     }
   };
+  var errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+  var onError = function (text) {
+    var errorMessage = errorMessageTemplate.cloneNode(true);
+    if (text) {
+      errorMessage.querySelector('.error__title').innerText = text;
+    }
+    document.querySelector('main').appendChild(errorMessage);
+  };
 
   // comments
   var getCommentElement = function (comment) {
@@ -53,12 +64,21 @@
   };
 
   // Создаю и вставляю на страницу предью изображений
-  var photoElementsList = document.createDocumentFragment();
+  /* var photoElementsList = document.createDocumentFragment();
   for (var index = 0; index < window.data.NUMBER_OF_PHOTOS; index++) {
     photoElementsList.appendChild(getPictureElement(window.data.photos[index]));
   }
   document.querySelector('.pictures').appendChild(photoElementsList);
-
+*/
+  var onLoad = function (data) {
+    // console.log(data);
+    var photoElementsList = document.createDocumentFragment();
+    data.forEach(function (item) {
+      photoElementsList.appendChild(getPictureElement(item));
+    });
+    document.querySelector('.pictures').appendChild(photoElementsList);
+  };
+  window.backend.download(onLoad, onError);
   // Прячу блоки счётчика комментариев и загрузки новых комментариев
   document.querySelector('.social__comment-count').classList.add('visually-hidden');
   document.querySelector('.comments-loader').classList.add('visually-hidden');
