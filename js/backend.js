@@ -6,13 +6,13 @@
       URL: 'https://js.dump.academy/kekstagram/data',
       requestType: 'GET',
       dataType: 'json',
-      timeout: 1
+      timeout: 10000
     },
     post: {
       URL: 'https://js.dump.academy/kekstagram',
       requestType: 'POST',
       dataType: 'json',
-      timeout: 10000
+      timeout: 1
     }
   };
 
@@ -40,10 +40,9 @@
 
     if (data) {
       xhr.send(data);
-      return true;
+      return;
     }
     xhr.send();
-    return false;
   };
 
   var download = function (onLoad, onError) {

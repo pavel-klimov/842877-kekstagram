@@ -44,6 +44,7 @@
     var target = evt.target;
     if (target === document.querySelector('.error')) {
       removeOverlayElement('.error');
+      document.removeEventListener('keydown', onErrorOverlayEscButtonPress);
     }
   };
 
@@ -65,6 +66,7 @@
     var target = evt.target;
     if ((target === document.querySelector('.success')) || (target === document.querySelector('.success__button'))) {
       removeOverlayElement('.success');
+      document.removeEventListener('keydown', onSuccessOverlayEscButtonPress);
     }
   };
 

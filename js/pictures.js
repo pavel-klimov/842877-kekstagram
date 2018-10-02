@@ -145,6 +145,7 @@
     target.setCustomValidity('');
     if (hashTags.length > 5) {
       target.setCustomValidity('Нельзя указывать больше пяти хэш-тегов;');
+      target.style.botder = null;
     } else if (target.value !== '') {
       for (var i = 0; i < hashTags.length; i++) {
         if (hashTags[i][0] !== '#') {
@@ -186,11 +187,25 @@
     document.querySelector('main').appendChild(successOverlayElement);
   };
 
+  var onError = function (text) {
+    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    errorOverlayElement.querySelector('.error__title').innerText = text;
+
+    window.overlay.closeOverlayElement('.img-upload__overlay');
+    document.querySelector('#upload-file').value = '';
+    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+
+    errorOverlayElement.querySelectorAll('.error__button').forEach(function (elem) {
+      elem.addEventListener('click', function () {
+        window.overlay.removeOverlayElement('.error');
+      });
+    });
+    document.querySelector('main').appendChild(errorOverlayElement);
+  };
+
   var onSubmitButtonClick = function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(evt.target), onLoad, function (data) {
-      console.log(data);
-    });
+    window.backend.upload(new FormData(evt.target), onLoad, onError);
   };
   document.querySelector('#upload-select-image').addEventListener('submit', onSubmitButtonClick);
 
