@@ -6,6 +6,14 @@
     document.querySelector(className).classList.add('hidden');
   };
 
+  var removeOverlayElement = function (className) {
+    document.querySelector('main').removeChild(document.querySelector(className));
+  };
+
+  var errorOverlayTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
   var onBigPictureOverlayEscButtonPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       closeOverlayElement('.big-picture');
@@ -19,6 +27,27 @@
       document.querySelector('#upload-file').value = '';
       document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
     }
+  };
+
+  var onErrorOverlayEscButtonPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removeOverlayElement('.error');
+      document.removeEventListener('keydown', onErrorOverlayEscButtonPress);
+    }
+  };
+
+  var onErrorOverlayClick = function (evt) {
+    var target = evt.target;
+    if (target !== document.querySelector('.error__inner')) {
+      removeOverlayElement('.error');
+    }
+  };
+
+  var getErrorOverlayElement = function () {
+    var errorOverlayElement = errorOverlayTemplate.cloneNode(true);
+    errorOverlayElement.addEventListener('click', onErrorOverlayClick);
+    document.addEventListener('keydown', onErrorOverlayEscButtonPress);
+    return errorOverlayElement;
   };
 
   document.querySelector('.big-picture__cancel').addEventListener('click', function () {
@@ -41,8 +70,10 @@
   document.querySelector('.text__hashtags').addEventListener('blur', onImgUploadOverlayTextInputBlur);
   document.querySelector('.text__description').addEventListener('focus', onImgUploadOverlayTextInputFocus);
   document.querySelector('.text__description').addEventListener('blur', onImgUploadOverlayTextInputBlur);
-  window.closeOverlay = {
+  window.overlay = {
     onBigPictureOverlayEscButtonPress: onBigPictureOverlayEscButtonPress,
-    onImgUploadOverlayEscButtonPress: onImgUploadOverlayEscButtonPress
+    onImgUploadOverlayEscButtonPress: onImgUploadOverlayEscButtonPress,
+    removeOverlayElement: removeOverlayElement,
+    getErrorOverlayElement: getErrorOverlayElement
   };
 })();

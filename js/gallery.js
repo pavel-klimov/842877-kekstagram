@@ -14,17 +14,6 @@
       element.removeChild(element.firstChild);
     }
   };
-  var errorMessageTemplate = document.querySelector('#error')
-  .content
-  .querySelector('.error');
-
-  var onError = function (text) {
-    var errorMessage = errorMessageTemplate.cloneNode(true);
-    if (text) {
-      errorMessage.querySelector('.error__title').innerText = text;
-    }
-    document.querySelector('main').appendChild(errorMessage);
-  };
 
   // comments
   var getCommentElement = function (comment) {
@@ -50,7 +39,7 @@
     pictureElement.addEventListener('click', function () {
       updateBigPictureData(picture);
       document.querySelector('.big-picture').classList.remove('hidden');
-      document.addEventListener('keydown', window.closeOverlay.onBigPictureOverlayEscButtonPress);
+      document.addEventListener('keydown', window.overlay.onBigPictureOverlayEscButtonPress);
     });
     return pictureElement;
   };
@@ -78,6 +67,16 @@
     });
     document.querySelector('.pictures').appendChild(photoElementsList);
   };
+  var onError = function (text) {
+    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    errorOverlayElement.querySelector('.error__title').innerText = text;
+    errorOverlayElement.querySelector('.error__button').addEventListener('click', function () {
+      window.backend.download(onLoad, onError);
+    });
+    errorOverlayElement.querySelector('.error__button:last-child').classList.add('hidden');
+    document.querySelector('main').appendChild(errorOverlayElement);
+  };
+
   window.backend.download(onLoad, onError);
   // Прячу блоки счётчика комментариев и загрузки новых комментариев
   document.querySelector('.social__comment-count').classList.add('visually-hidden');

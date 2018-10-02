@@ -174,7 +174,7 @@
     document.querySelector('.img-upload__overlay').classList.remove('hidden');
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
-    document.addEventListener('keydown', window.closeOverlay.onImgUploadOverlayEscButtonPress);
+    document.addEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
   });
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
