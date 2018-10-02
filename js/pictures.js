@@ -183,6 +183,8 @@
 
   var onLoad = function () {
     window.overlay.closeOverlayElement('.img-upload__overlay');
+    document.querySelector('#upload-file').value = '';
+    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
     var successOverlayElement = window.overlay.getSuccessOverlayElement();
     document.querySelector('main').appendChild(successOverlayElement);
   };
