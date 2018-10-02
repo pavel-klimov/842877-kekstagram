@@ -30,7 +30,6 @@
     return commentElementsList;
   };
 
-  // photos
   var getPictureElement = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = picture.url;
@@ -52,15 +51,7 @@
     document.querySelector('.social__caption').textContent = data.description;
   };
 
-  // Создаю и вставляю на страницу предью изображений
-  /* var photoElementsList = document.createDocumentFragment();
-  for (var index = 0; index < window.data.NUMBER_OF_PHOTOS; index++) {
-    photoElementsList.appendChild(getPictureElement(window.data.photos[index]));
-  }
-  document.querySelector('.pictures').appendChild(photoElementsList);
-*/
   var onLoad = function (data) {
-    // console.log(data);
     var photoElementsList = document.createDocumentFragment();
     data.forEach(function (item) {
       photoElementsList.appendChild(getPictureElement(item));
@@ -71,6 +62,7 @@
     var errorOverlayElement = window.overlay.getErrorOverlayElement();
     errorOverlayElement.querySelector('.error__title').innerText = text;
     errorOverlayElement.querySelector('.error__button').addEventListener('click', function () {
+      window.overlay.removeOverlayElement('.error');
       window.backend.download(onLoad, onError);
     });
     errorOverlayElement.querySelector('.error__button:last-child').classList.add('hidden');

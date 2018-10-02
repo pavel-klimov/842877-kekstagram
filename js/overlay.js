@@ -11,8 +11,12 @@
   };
 
   var errorOverlayTemplate = document.querySelector('#error')
-  .content
-  .querySelector('.error');
+    .content
+    .querySelector('.error');
+
+  var successOverlayTemplate = document.querySelector('#success')
+    .content
+    .querySelector('.success');
 
   var onBigPictureOverlayEscButtonPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -38,7 +42,7 @@
 
   var onErrorOverlayClick = function (evt) {
     var target = evt.target;
-    if (target !== document.querySelector('.error__inner')) {
+    if (target === document.querySelector('.error')) {
       removeOverlayElement('.error');
     }
   };
@@ -48,6 +52,27 @@
     errorOverlayElement.addEventListener('click', onErrorOverlayClick);
     document.addEventListener('keydown', onErrorOverlayEscButtonPress);
     return errorOverlayElement;
+  };
+
+  var onSuccessOverlayEscButtonPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removeOverlayElement('.success');
+      document.removeEventListener('keydown', onSuccessOverlayEscButtonPress);
+    }
+  };
+
+  var onSuccessOverlayClick = function (evt) {
+    var target = evt.target;
+    if ((target === document.querySelector('.success')) || (target === document.querySelector('.success__button'))) {
+      removeOverlayElement('.success');
+    }
+  };
+
+  var getSuccessOverlayElement = function () {
+    var successOverlayElement = successOverlayTemplate.cloneNode(true);
+    successOverlayElement.addEventListener('click', onSuccessOverlayClick);
+    document.addEventListener('keydown', onSuccessOverlayEscButtonPress);
+    return successOverlayElement;
   };
 
   document.querySelector('.big-picture__cancel').addEventListener('click', function () {
@@ -74,6 +99,8 @@
     onBigPictureOverlayEscButtonPress: onBigPictureOverlayEscButtonPress,
     onImgUploadOverlayEscButtonPress: onImgUploadOverlayEscButtonPress,
     removeOverlayElement: removeOverlayElement,
-    getErrorOverlayElement: getErrorOverlayElement
+    closeOverlayElement: closeOverlayElement,
+    getErrorOverlayElement: getErrorOverlayElement,
+    getSuccessOverlayElement: getSuccessOverlayElement
   };
 })();

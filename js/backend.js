@@ -6,7 +6,7 @@
       URL: 'https://js.dump.academy/kekstagram/data',
       requestType: 'GET',
       dataType: 'json',
-      timeout: 10000
+      timeout: 1
     },
     post: {
       URL: 'https://js.dump.academy/kekstagram',
