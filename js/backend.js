@@ -12,7 +12,7 @@
       URL: 'https://js.dump.academy/kekstagram',
       requestType: 'POST',
       dataType: 'json',
-      timeout: 1
+      timeout: 10000
     }
   };
 
