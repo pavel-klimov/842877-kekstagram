@@ -9,14 +9,6 @@
       .querySelector('.picture');
   var commentTemplate = document.querySelector('.social__comment').cloneNode(true);
 
-  /*
-  var removeAllChild = function (element) {
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-  };
-  */
-
   var removeAllElements = function (elements) {
     elements.forEach(function (elem) {
       elem.remove();
