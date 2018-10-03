@@ -38,11 +38,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    if (data) {
-      xhr.send(data);
-      return;
-    }
-    xhr.send();
+    xhr.send(data);
   };
 
   var download = function (onLoad, onError) {
