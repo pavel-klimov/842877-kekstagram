@@ -30,7 +30,6 @@
     return commentElementsList;
   };
 
-  // photos
   var getPictureElement = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = picture.url;
@@ -39,7 +38,7 @@
     pictureElement.addEventListener('click', function () {
       updateBigPictureData(picture);
       document.querySelector('.big-picture').classList.remove('hidden');
-      document.addEventListener('keydown', window.closeOverlay.onBigPictureOverlayEscButtonPress);
+      document.addEventListener('keydown', window.overlay.onBigPictureOverlayEscButtonPress);
     });
     return pictureElement;
   };
@@ -52,13 +51,25 @@
     document.querySelector('.social__caption').textContent = data.description;
   };
 
-  // Создаю и вставляю на страницу предью изображений
-  var photoElementsList = document.createDocumentFragment();
-  for (var index = 0; index < window.data.NUMBER_OF_PHOTOS; index++) {
-    photoElementsList.appendChild(getPictureElement(window.data.photos[index]));
-  }
-  document.querySelector('.pictures').appendChild(photoElementsList);
+  var onLoad = function (data) {
+    var photoElementsList = document.createDocumentFragment();
+    data.forEach(function (item) {
+      photoElementsList.appendChild(getPictureElement(item));
+    });
+    document.querySelector('.pictures').appendChild(photoElementsList);
+  };
+  var onError = function (text) {
+    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    errorOverlayElement.querySelector('.error__title').innerText = text;
+    errorOverlayElement.querySelector('.error__button').addEventListener('click', function () {
+      window.overlay.removeOverlayElement('.error');
+      window.backend.download(onLoad, onError);
+    });
+    errorOverlayElement.querySelector('.error__button:last-child').classList.add('hidden');
+    document.querySelector('main').appendChild(errorOverlayElement);
+  };
 
+  window.backend.download(onLoad, onError);
   // Прячу блоки счётчика комментариев и загрузки новых комментариев
   document.querySelector('.social__comment-count').classList.add('visually-hidden');
   document.querySelector('.comments-loader').classList.add('visually-hidden');

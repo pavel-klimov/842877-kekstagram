@@ -44,7 +44,6 @@
   var SCALE_EFFECT_MIN = 25;
   var SCALE_EFFECT_MAX = 100;
 
-  // Делегирование:
   var setScaleEffectLevel = function (level) {
     document.querySelector('.scale__control--value').value = level + '%';
     document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
@@ -146,7 +145,8 @@
     target.setCustomValidity('');
     if (hashTags.length > 5) {
       target.setCustomValidity('Нельзя указывать больше пяти хэш-тегов;');
-    } else {
+      target.style.botder = null;
+    } else if (target.value !== '') {
       for (var i = 0; i < hashTags.length; i++) {
         if (hashTags[i][0] !== '#') {
           target.setCustomValidity('Хэш-тег должен начинаться с символа # (решётка);');
@@ -172,11 +172,43 @@
 
   document.querySelector('#upload-file').addEventListener('change', function () {
     document.querySelector('.img-upload__overlay').classList.remove('hidden');
+    document.querySelector('.text__hashtags').value = '';
+    document.querySelector('.text__description').value = '';
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
-    document.addEventListener('keydown', window.closeOverlay.onImgUploadOverlayEscButtonPress);
+    document.addEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
   });
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
+
+  var onLoad = function () {
+    window.overlay.closeOverlayElement('.img-upload__overlay');
+    document.querySelector('#upload-file').value = '';
+    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+    var successOverlayElement = window.overlay.getSuccessOverlayElement();
+    document.querySelector('main').appendChild(successOverlayElement);
+  };
+
+  var onError = function (text) {
+    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    errorOverlayElement.querySelector('.error__title').innerText = text;
+
+    window.overlay.closeOverlayElement('.img-upload__overlay');
+    document.querySelector('#upload-file').value = '';
+    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+
+    errorOverlayElement.querySelectorAll('.error__button').forEach(function (elem) {
+      elem.addEventListener('click', function () {
+        window.overlay.removeOverlayElement('.error');
+      });
+    });
+    document.querySelector('main').appendChild(errorOverlayElement);
+  };
+
+  var onSubmitButtonClick = function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(evt.target), onLoad, onError);
+  };
+  document.querySelector('#upload-select-image').addEventListener('submit', onSubmitButtonClick);
 
 })();

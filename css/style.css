@@ -41,6 +41,10 @@ main {
   position: relative;
 }
 
+input:invalid {
+  border: 2px solid red;
+}
+
 .content-box-component {
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
