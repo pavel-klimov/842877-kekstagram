@@ -9,12 +9,19 @@
       .querySelector('.picture');
   var commentTemplate = document.querySelector('.social__comment').cloneNode(true);
 
+  /*
   var removeAllChild = function (element) {
     while (element.firstChild) {
       element.removeChild(element.firstChild);
     }
   };
+  */
 
+  var removeAllElements = function (elements) {
+    elements.forEach(function (elem) {
+      elem.remove();
+    });
+  };
   // comments
   var getCommentElement = function (comment) {
     var commentElement = commentTemplate.cloneNode(true);
@@ -46,17 +53,43 @@
     document.querySelector('.big-picture__img img').src = data.url;
     document.querySelector('.likes-count').textContent = data.likes;
     document.querySelector('.comments-count').textContent = data.comments.length;
-    removeAllChild(document.querySelector('.social__comments'));
+    removeAllElements(document.querySelectorAll('.social__comment'));
     document.querySelector('.social__comments').appendChild(createCommentsFragment(data.comments));
     document.querySelector('.social__caption').textContent = data.description;
   };
 
-  var onLoad = function (data) {
+  var appendGalleryData = function (data) {
     var photoElementsList = document.createDocumentFragment();
     data.forEach(function (item) {
       photoElementsList.appendChild(getPictureElement(item));
     });
     document.querySelector('.pictures').appendChild(photoElementsList);
+  };
+  var bindEventToImageSortButton = function (data) {
+    var onImgSortClick = function (evt) {
+      var target = evt.target;
+      if (!target.classList.contains('img-filters__button--active') && target.classList.contains('img-filters__button')) {
+        document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
+        target.classList.add('img-filters__button--active');
+        var newData = data;
+        if (target.id === 'filter-new') {
+          newData = window.sort.random(data);
+        } else if (target.id === 'filter-discussed') {
+          newData = window.sort.byComments(data);
+        }
+        window.debounce(function () {
+          removeAllElements(document.querySelectorAll('.container.pictures a.picture'));
+          appendGalleryData(newData);
+        });
+      }
+    };
+    document.querySelector('.img-filters__form').addEventListener('click', onImgSortClick);
+  };
+
+  var onLoad = function (data) {
+    appendGalleryData(data);
+    document.querySelector('.img-filters--inactive').classList.remove('img-filters--inactive');
+    bindEventToImageSortButton(data);
   };
   var onError = function (text) {
     var errorOverlayElement = window.overlay.getErrorOverlayElement();
@@ -73,4 +106,7 @@
   // Прячу блоки счётчика комментариев и загрузки новых комментариев
   document.querySelector('.social__comment-count').classList.add('visually-hidden');
   document.querySelector('.comments-loader').classList.add('visually-hidden');
+  window.gallery = {
+    data: null
+  };
 })();
