@@ -3,7 +3,7 @@
 (function () {
   var MIN_COMMENT_AVATAR_COUNT = 1;
   var MAX_COMMENT_AVATAR_COUNT = 6;
-
+  var COMMENTS_SHOW_GROUP = 5;
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
@@ -28,6 +28,21 @@
     }
     return commentElementsList;
   };
+  var showCommentsGroup = function (comments) {
+    var groupSize = (comments.length <= COMMENTS_SHOW_GROUP) ? comments.length : COMMENTS_SHOW_GROUP;
+    var onShowMoreClick = function () {
+      document.querySelector('.comments-loader').removeEventListener('click', onShowMoreClick);
+      showCommentsGroup(comments);
+    };
+    document.querySelector('.comments-count').textContent = comments.length;
+    document.querySelector('.social__comments').appendChild(createCommentsFragment(comments.splice(0, groupSize)));
+    document.querySelector('.social__comment-count').classList.add('visually-hidden');
+    if (comments.length === 0) {
+      document.querySelector('.comments-loader').classList.add('visually-hidden');
+    } else {
+      document.querySelector('.comments-loader').addEventListener('click', onShowMoreClick);
+    }
+  };
 
   var getPictureElement = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -44,9 +59,9 @@
   var updateBigPictureData = function (data) {
     document.querySelector('.big-picture__img img').src = data.url;
     document.querySelector('.likes-count').textContent = data.likes;
-    document.querySelector('.comments-count').textContent = data.comments.length;
     removeAllElements(document.querySelectorAll('.social__comment'));
-    document.querySelector('.social__comments').appendChild(createCommentsFragment(data.comments));
+    document.querySelector('.comments-loader').classList.remove('visually-hidden');
+    showCommentsGroup(data.comments.slice(0));
     document.querySelector('.social__caption').textContent = data.description;
   };
 
@@ -95,10 +110,4 @@
   };
 
   window.backend.download(onLoad, onError);
-  // Прячу блоки счётчика комментариев и загрузки новых комментариев
-  document.querySelector('.social__comment-count').classList.add('visually-hidden');
-  document.querySelector('.comments-loader').classList.add('visually-hidden');
-  window.gallery = {
-    data: null
-  };
 })();
