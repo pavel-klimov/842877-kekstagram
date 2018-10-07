@@ -109,35 +109,6 @@
     setEffectLevelBigPicture(FILTER_EFFECT_DEFAULT, nameEffect);
   };
 
-  // Drag and Drop:
-  document.querySelector('.effect-level__pin').addEventListener('mousedown', function () {
-    var width = document.querySelector('.effect-level__line').offsetWidth;
-    var elementX = document.querySelector('.effect-level__line').getBoundingClientRect().x;
-    var nameEffect = document.querySelector('.effects__radio:checked').value;
-    var changeEffectLevel = function (evtX) {
-      var position = evtX - elementX;
-      if (evtX < elementX) {
-        position = elementX;
-      } else if (evtX > (width + elementX)) {
-        position = width;
-      }
-      var level = position / width * 100;
-      setEffectLevelLine(level);
-      setEffectLevelBigPicture(level, nameEffect);
-    };
-
-    var onEffectLevelPinMove = function (evt) {
-      changeEffectLevel(evt.clientX);
-    };
-
-    var onEffectLevelPinMouseUp = function () {
-      document.removeEventListener('mousemove', onEffectLevelPinMove);
-      document.removeEventListener('mouseup', onEffectLevelPinMouseUp);
-    };
-    document.addEventListener('mousemove', onEffectLevelPinMove);
-    document.addEventListener('mouseup', onEffectLevelPinMouseUp);
-  });
-
   // Хэш-теги:
   var onHashTagValidate = function (evt) {
     var target = evt.target;
@@ -211,4 +182,8 @@
   };
   document.querySelector('#upload-select-image').addEventListener('submit', onSubmitButtonClick);
 
+  window.picture = {
+    setEffectLevelLine: setEffectLevelLine,
+    setEffectLevelBigPicture: setEffectLevelBigPicture
+  };
 })();
