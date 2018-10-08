@@ -66,11 +66,15 @@
     setScaleEffectLevel(level);
   };
 
+  var calculatingPercentageOfInterval = function (percent, min, max) {
+    return (percent / 100) * (max - min) + min;
+  };
+
   document.querySelector('.img-upload__scale').addEventListener('click', onScaleEffectLevel);
   var getCurrentFilterStyle = function (level, nameEffect) {
     return (nameEffect === 'none') ? 'none' :
       EFFECTS_PREVIEW_SETTINGS[nameEffect].name + '(' +
-      window.utils.calculatingPercentageOfInterval(level, EFFECTS_PREVIEW_SETTINGS[nameEffect].min, EFFECTS_PREVIEW_SETTINGS[nameEffect].max) +
+      calculatingPercentageOfInterval(level, EFFECTS_PREVIEW_SETTINGS[nameEffect].min, EFFECTS_PREVIEW_SETTINGS[nameEffect].max) +
       EFFECTS_PREVIEW_SETTINGS[nameEffect].dimension + ')';
   };
 
