@@ -48,7 +48,6 @@
     xhrRequest(REQUEST_SETTINGS.post, onLoad, onError, data);
   };
 
-  // download(function (data) { console.log(data)}, function (text) {console.log(text)});
   window.backend = {
     download: download,
     upload: upload

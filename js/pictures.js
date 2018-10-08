@@ -66,11 +66,15 @@
     setScaleEffectLevel(level);
   };
 
+  var calculatingPercentageOfInterval = function (percent, min, max) {
+    return (percent / 100) * (max - min) + min;
+  };
+
   document.querySelector('.img-upload__scale').addEventListener('click', onScaleEffectLevel);
   var getCurrentFilterStyle = function (level, nameEffect) {
     return (nameEffect === 'none') ? 'none' :
       EFFECTS_PREVIEW_SETTINGS[nameEffect].name + '(' +
-      window.utils.calculatingPercentageOfInterval(level, EFFECTS_PREVIEW_SETTINGS[nameEffect].min, EFFECTS_PREVIEW_SETTINGS[nameEffect].max) +
+      calculatingPercentageOfInterval(level, EFFECTS_PREVIEW_SETTINGS[nameEffect].min, EFFECTS_PREVIEW_SETTINGS[nameEffect].max) +
       EFFECTS_PREVIEW_SETTINGS[nameEffect].dimension + ')';
   };
 
@@ -117,7 +121,7 @@
     var changeEffectLevel = function (evtX) {
       var position = evtX - elementX;
       if (evtX < elementX) {
-        position = elementX;
+        position = 0;
       } else if (evtX > (width + elementX)) {
         position = width;
       }
@@ -181,10 +185,13 @@
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
 
-  var onLoad = function () {
+  var closeImgUploadOverlay = function () {
     window.overlay.closeOverlayElement('.img-upload__overlay');
     document.querySelector('#upload-file').value = '';
     document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+  };
+  var onLoad = function () {
+    closeImgUploadOverlay();
     var successOverlayElement = window.overlay.getSuccessOverlayElement();
     document.querySelector('main').appendChild(successOverlayElement);
   };
@@ -192,11 +199,7 @@
   var onError = function (text) {
     var errorOverlayElement = window.overlay.getErrorOverlayElement();
     errorOverlayElement.querySelector('.error__title').innerText = text;
-
-    window.overlay.closeOverlayElement('.img-upload__overlay');
-    document.querySelector('#upload-file').value = '';
-    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
-
+    closeImgUploadOverlay();
     errorOverlayElement.querySelectorAll('.error__button').forEach(function (elem) {
       elem.addEventListener('click', function () {
         window.overlay.removeOverlayElement('.error');
