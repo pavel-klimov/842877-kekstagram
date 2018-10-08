@@ -121,7 +121,7 @@
     var changeEffectLevel = function (evtX) {
       var position = evtX - elementX;
       if (evtX < elementX) {
-        position = elementX;
+        position = 0;
       } else if (evtX > (width + elementX)) {
         position = width;
       }
