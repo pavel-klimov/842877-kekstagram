@@ -180,29 +180,29 @@
     document.querySelector('.text__description').value = '';
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
-    document.addEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+    document.addEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
   });
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
 
   var closeImgUploadOverlay = function () {
-    window.overlay.closeOverlayElement('.img-upload__overlay');
+    window.overlay.closeElement('.img-upload__overlay');
     document.querySelector('#upload-file').value = '';
-    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+    document.removeEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
   };
   var onLoad = function () {
     closeImgUploadOverlay();
-    var successOverlayElement = window.overlay.getSuccessOverlayElement();
+    var successOverlayElement = window.overlay.getSuccessElement();
     document.querySelector('main').appendChild(successOverlayElement);
   };
 
   var onError = function (text) {
-    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    var errorOverlayElement = window.overlay.getErrorElement();
     errorOverlayElement.querySelector('.error__title').innerText = text;
     closeImgUploadOverlay();
     errorOverlayElement.querySelectorAll('.error__button').forEach(function (elem) {
       elem.addEventListener('click', function () {
-        window.overlay.removeOverlayElement('.error');
+        window.overlay.removeElement('.error');
       });
     });
     document.querySelector('main').appendChild(errorOverlayElement);
