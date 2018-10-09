@@ -175,6 +175,7 @@
       }
     }
   };
+  document.querySelector('.text__hashtags').setCustomValidity('');
 
   document.querySelector('#upload-file').addEventListener('change', function (evt) {
     var hashTagField = document.querySelector('.text__hashtags');
@@ -182,7 +183,6 @@
     document.querySelector('.effects__radio').checked = true;
     document.querySelector('.scale__control--value').value = '100%';
     hashTagField.value = '';
-    hashTagField.removeEventListener('input', onHashTagValidate);
     hashTagField.setCustomValidity('');
     hashTagField.addEventListener('input', onHashTagValidate);
     onFilterEffectChange();
