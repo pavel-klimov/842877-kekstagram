@@ -25,13 +25,9 @@
     }
   };
 
-  var imgUploadOverlayClose = function () {
-    closeOverlayElement('.img-upload__overlay');
-    document.querySelector('#upload-select-image').reset();
-  };
   var onImgUploadOverlayEscButtonPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      imgUploadOverlayClose();
+      closeOverlayElement('.img-upload__overlay');
       document.querySelector('#upload-file').value = '';
       document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
     }
@@ -87,7 +83,7 @@
   });
 
   document.querySelector('.img-upload__cancel').addEventListener('click', function () {
-    imgUploadOverlayClose();
+    closeOverlayElement('.img-upload__overlay');
     document.removeEventListener('keydown', onImgUploadOverlayEscButtonPress);
   });
 
