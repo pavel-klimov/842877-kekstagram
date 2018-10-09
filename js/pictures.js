@@ -161,6 +161,9 @@
         } else if (hashTags[i].length > 20) {
           target.setCustomValidity('Максимальная длина хэш-тега 20 символов, включая решётку;');
           break;
+        } else if (hashTags[i].lastIndexOf('#') !== 0) {
+          target.setCustomValidity('Между тегами должны быть пробелы;');
+          break;
         } else {
           for (var j = i + 1; j < hashTags.length; j++) {
             if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
