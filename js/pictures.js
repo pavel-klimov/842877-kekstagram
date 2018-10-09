@@ -174,8 +174,7 @@
   };
   document.querySelector('.text__hashtags').addEventListener('input', onHashTagValidate);
 
-  document.querySelector('#upload-file').addEventListener('change', function () {
-    document.querySelector('.img-upload__overlay').classList.remove('hidden');
+  document.querySelector('#upload-file').addEventListener('change', function (evt) {
     document.querySelector('.text__hashtags').value = '';
     document.querySelector('.text__description').value = '';
     document.querySelector('.effects__radio').checked = true;
@@ -183,6 +182,15 @@
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
     document.addEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
+
+    var file = evt.target.files[0];
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      document.querySelector('.img-upload__preview img').src = reader.result;
+    });
+    reader.readAsDataURL(file);
+
+    document.querySelector('.img-upload__overlay').classList.remove('hidden');
   });
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
