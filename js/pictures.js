@@ -179,7 +179,6 @@
 
   document.querySelector('#upload-file').addEventListener('change', function (evt) {
     document.querySelector('.text__hashtags').value = '';
-    document.querySelector('.text__hashtags').setCustomValidity = '';
     document.querySelector('.text__description').value = '';
     document.querySelector('.effects__radio').checked = true;
     document.querySelector('.scale__control--value').value = '100%';
