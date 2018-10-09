@@ -46,7 +46,7 @@
 
   var setScaleEffectLevel = function (level) {
     document.querySelector('.scale__control--value').value = level + '%';
-    document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
+    document.querySelector('.img-upload__preview').style.transform = 'scale(' + level / 100 + ')';
   };
 
   var onScaleEffectLevel = function (evt) {
@@ -178,6 +178,8 @@
     document.querySelector('.img-upload__overlay').classList.remove('hidden');
     document.querySelector('.text__hashtags').value = '';
     document.querySelector('.text__description').value = '';
+    document.querySelector('.effects__radio').checked = true;
+    document.querySelector('.scale__control--value').value = '100%';
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
     document.addEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
