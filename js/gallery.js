@@ -52,7 +52,7 @@
     pictureElement.addEventListener('click', function () {
       updateBigPictureData(picture);
       document.querySelector('.big-picture').classList.remove('hidden');
-      document.addEventListener('keydown', window.overlay.onBigPictureOverlayEscButtonPress);
+      document.addEventListener('keydown', window.overlay.onBigPictureEscButtonPress);
     });
     return pictureElement;
   };
@@ -99,10 +99,10 @@
     bindEventToImageSortButton(data);
   };
   var onError = function (text) {
-    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    var errorOverlayElement = window.overlay.getErrorElement();
     errorOverlayElement.querySelector('.error__title').innerText = text;
     errorOverlayElement.querySelector('.error__button').addEventListener('click', function () {
-      window.overlay.removeOverlayElement('.error');
+      window.overlay.removeElement('.error');
       window.backend.download(onLoad, onError);
     });
     errorOverlayElement.querySelector('.error__button:last-child').classList.add('hidden');

@@ -46,7 +46,7 @@
 
   var setScaleEffectLevel = function (level) {
     document.querySelector('.scale__control--value').value = level + '%';
-    document.querySelector('.img-upload__preview img').style.transform = 'scale(' + level / 100 + ')';
+    document.querySelector('.img-upload__preview').style.transform = 'scale(' + level / 100 + ')';
   };
 
   var onScaleEffectLevel = function (evt) {
@@ -161,6 +161,9 @@
         } else if (hashTags[i].length > 20) {
           target.setCustomValidity('Максимальная длина хэш-тега 20 символов, включая решётку;');
           break;
+        } else if (hashTags[i].lastIndexOf('#') !== 0) {
+          target.setCustomValidity('Между тегами должны быть пробелы;');
+          break;
         } else {
           for (var j = i + 1; j < hashTags.length; j++) {
             if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
@@ -172,37 +175,50 @@
       }
     }
   };
-  document.querySelector('.text__hashtags').addEventListener('input', onHashTagValidate);
+  document.querySelector('.text__hashtags').setCustomValidity('');
 
-  document.querySelector('#upload-file').addEventListener('change', function () {
-    document.querySelector('.img-upload__overlay').classList.remove('hidden');
-    document.querySelector('.text__hashtags').value = '';
+  document.querySelector('#upload-file').addEventListener('change', function (evt) {
+    var hashTagField = document.querySelector('.text__hashtags');
     document.querySelector('.text__description').value = '';
+    document.querySelector('.effects__radio').checked = true;
+    document.querySelector('.scale__control--value').value = '100%';
+    hashTagField.value = '';
+    hashTagField.setCustomValidity('');
+    hashTagField.addEventListener('input', onHashTagValidate);
     onFilterEffectChange();
     setScaleEffectLevel(SCALE_EFFECT_DEFAULT);
-    document.addEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+    document.addEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
+
+    var file = evt.target.files[0];
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      document.querySelector('.img-upload__preview img').src = reader.result;
+    });
+    reader.readAsDataURL(file);
+
+    document.querySelector('.img-upload__overlay').classList.remove('hidden');
   });
 
   document.querySelector('.effects__list').addEventListener('change', onFilterEffectChange);
 
   var closeImgUploadOverlay = function () {
-    window.overlay.closeOverlayElement('.img-upload__overlay');
+    window.overlay.closeElement('.img-upload__overlay');
     document.querySelector('#upload-file').value = '';
-    document.removeEventListener('keydown', window.overlay.onImgUploadOverlayEscButtonPress);
+    document.removeEventListener('keydown', window.overlay.onImgUploadEscButtonPress);
   };
   var onLoad = function () {
     closeImgUploadOverlay();
-    var successOverlayElement = window.overlay.getSuccessOverlayElement();
+    var successOverlayElement = window.overlay.getSuccessElement();
     document.querySelector('main').appendChild(successOverlayElement);
   };
 
   var onError = function (text) {
-    var errorOverlayElement = window.overlay.getErrorOverlayElement();
+    var errorOverlayElement = window.overlay.getErrorElement();
     errorOverlayElement.querySelector('.error__title').innerText = text;
     closeImgUploadOverlay();
     errorOverlayElement.querySelectorAll('.error__button').forEach(function (elem) {
       elem.addEventListener('click', function () {
-        window.overlay.removeOverlayElement('.error');
+        window.overlay.removeElement('.error');
       });
     });
     document.querySelector('main').appendChild(errorOverlayElement);

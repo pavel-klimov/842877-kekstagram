@@ -98,11 +98,11 @@
   document.querySelector('.text__description').addEventListener('focus', onImgUploadOverlayTextInputFocus);
   document.querySelector('.text__description').addEventListener('blur', onImgUploadOverlayTextInputBlur);
   window.overlay = {
-    onBigPictureOverlayEscButtonPress: onBigPictureOverlayEscButtonPress,
-    onImgUploadOverlayEscButtonPress: onImgUploadOverlayEscButtonPress,
-    removeOverlayElement: removeOverlayElement,
-    closeOverlayElement: closeOverlayElement,
-    getErrorOverlayElement: getErrorOverlayElement,
-    getSuccessOverlayElement: getSuccessOverlayElement
+    onBigPictureEscButtonPress: onBigPictureOverlayEscButtonPress,
+    onImgUploadEscButtonPress: onImgUploadOverlayEscButtonPress,
+    removeElement: removeOverlayElement,
+    closeElement: closeOverlayElement,
+    getErrorElement: getErrorOverlayElement,
+    getSuccessElement: getSuccessOverlayElement
   };
 })();
