@@ -116,7 +116,7 @@
   // Drag and Drop:
   document.querySelector('.effect-level__pin').addEventListener('mousedown', function () {
     var width = document.querySelector('.effect-level__line').offsetWidth;
-    var elementX = document.querySelector('.effect-level__line').getBoundingClientRect().x;
+    var elementX = document.querySelector('.effect-level__line').getBoundingClientRect().left;
     var nameEffect = document.querySelector('.effects__radio:checked').value;
     var changeEffectLevel = function (evtX) {
       var position = evtX - elementX;
